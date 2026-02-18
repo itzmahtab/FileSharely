@@ -1,0 +1,37 @@
+// Prisma schema for FileSharely
+// Minimal production-ready schema with User and File models
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// User model - represents authenticated users via Clerk
+model User {
+  id          String   @id @default(uuid()) // Unique identifier for the user
+  clerkUserId String   @unique // Unique ID from Clerk authentication provider
+  email       String   @unique // User's email address, must be unique
+  name        String // User's display name
+  username    String // User's username
+  onboarded   Boolean  @default(false) // Tracks if user completed onboarding flow
+  files       File[] // One-to-many relationship: user can have multiple files
+
+}
+
+// File model - represents uploaded files with public shareable links
+model File {
+  id            String   @id @default(uuid()) // Unique identifier for the file
+  title         String // Display title for the file
+  description   String // Description of the file content
+  coverImageURL String // URL to cover/preview image
+  fileURL       String // URL to the actual uploaded file (from UploadThing)
+  downloads     Int      @default(0) // Track number of times file was downloaded
+  createdAt     DateTime @default(now()) // Timestamp when file was uploaded
+  userId        String // Foreign key referencing the User who uploaded this file
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade) // Relation to User, cascading delete
+
+}
