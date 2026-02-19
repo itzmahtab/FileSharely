@@ -1,11 +1,7 @@
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import LandingPage from "@/app/components/LandingPage";
-
-const getUser = async (id: string): Promise<{ onboarded: boolean } | null> => {
-  // Mock getUser action - update this later when real DB is ready
-  return null;
-};
+import { getUser } from "@/app/server/actions/user.actions";
 
 export default async function Home() {
   const clerkUser = await currentUser();
