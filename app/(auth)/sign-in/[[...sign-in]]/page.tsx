@@ -3,11 +3,7 @@ import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import Image from "next/image";
 import { UserPlus, Upload, Share2 } from "lucide-react";
-
-const getUser = async (id: string): Promise<{ onboarded: boolean } | null> => {
-    // Mock getUser action - consistent with app/page.tsx
-    return null;
-};
+import { getUser } from "@/app/server/actions/user.actions";
 
 export default async function SignInPage() {
     const clerkUser = await currentUser();

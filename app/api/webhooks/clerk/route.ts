@@ -1,7 +1,7 @@
 import { Webhook } from 'svix'
 import { headers } from 'next/headers'
 import { WebhookEvent } from '@clerk/nextjs/server'
-import prisma from '@/lib/prisma'
+import { createOrUpdateUser, deleteUser } from '@/app/server/actions/user.actions'
 
 export async function POST(req: Request) {
     const SIGNING_SECRET = process.env.CLERK_WEBHOOK_SINGING_SECRET
@@ -49,40 +49,14 @@ export async function POST(req: Request) {
     const eventType = evt.type
 
     if (eventType === 'user.created' || eventType === 'user.updated') {
-        const { id, email_addresses, first_name, last_name, username } = evt.data
-
-        const email = email_addresses[0]?.email_address
-        const name = `${first_name || ''} ${last_name || ''}`.trim() || username || 'User'
-        const finalUsername = username || email.split('@')[0]
-
-        if (eventType === 'user.created') {
-            await prisma.user.create({
-                data: {
-                    clerkUserId: id,
-                    email: email,
-                    name: name,
-                    username: finalUsername,
-                    onboarded: false,
-                },
-            })
-        } else {
-            await prisma.user.update({
-                where: { clerkUserId: id },
-                data: {
-                    email: email,
-                    name: name,
-                    username: finalUsername,
-                }
-            })
-        }
+        // evt.data has the fields needed for ClerkUserWebhookData
+        await createOrUpdateUser(evt.data as any)
     }
 
     if (eventType === 'user.deleted') {
         const { id } = evt.data
         if (id) {
-            await prisma.user.delete({
-                where: { clerkUserId: id }
-            })
+            await deleteUser(id)
         }
     }
 
