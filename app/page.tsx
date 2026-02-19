@@ -1,9 +1,26 @@
-import Image from "next/image";
+import { currentUser } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
+import LandingPage from "@/app/components/LandingPage";
 
-export default function Home() {
-  return (
-    <h1>
-      Hello filesystem! This is a test of the new filesystem API in Next.js 14. You can read more about it in the documentation: https://nextjs.org/docs/app/building-your-application/routing#filesystem-api
-    </h1>
-  );
+const getUser = async (id: string): Promise<{ onboarded: boolean } | null> => {
+  // Mock getUser action - update this later when real DB is ready
+  return null;
+};
+
+export default async function Home() {
+  const clerkUser = await currentUser();
+
+  if (clerkUser) {
+    const dbUser = await getUser(clerkUser.id);
+
+    if (dbUser) {
+      if (dbUser.onboarded) {
+        redirect("/main");
+      } else {
+        redirect("/onboarding");
+      }
+    }
+  }
+
+  return <LandingPage />;
 }
