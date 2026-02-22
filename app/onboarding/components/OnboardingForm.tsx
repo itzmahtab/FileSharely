@@ -18,9 +18,10 @@ type OnboardingFormProps = {
         email: string;
         username: string;
     };
+    className?: string;
 };
 
-export default function OnboardingForm({ user }: OnboardingFormProps) {
+export default function OnboardingForm({ user, className }: OnboardingFormProps) {
     const router = useRouter();
 
     const {
@@ -57,7 +58,7 @@ export default function OnboardingForm({ user }: OnboardingFormProps) {
     };
 
     return (
-        <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4">
+        <div className={`flex min-h-screen items-center justify-center bg-gray-50 px-4 ${className}`}>
             <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-md">
                 <h1 className="mb-2 text-2xl font-bold text-gray-900">
                     Complete your profile

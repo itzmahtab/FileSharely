@@ -20,7 +20,7 @@ export default async function SignUpPage() {
     }
 
     return (
-        <div className="min-h-screen bg-white flex items-center justify-center p-6 md:p-12">
+        <div className="min-h-screen bg-white flex items-center justify-center p-6 md:p-12 animate-fade-in">
             <div className="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-8 items-center">
 
                 {/* Left Side - Slogan and Steps (Smaller) */}

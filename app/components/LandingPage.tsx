@@ -5,9 +5,9 @@ import Link from "next/link";
 import { UserPlus, Upload, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-export default function LandingPage() {
+export default function LandingPage({ className }: { className?: string }) {
     return (
-        <div className="min-h-screen bg-white flex items-center justify-center p-6 md:p-12">
+        <div className={`min-h-screen bg-white flex items-center justify-center p-6 md:p-12 ${className}`}>
             <div className="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-8 items-center">
 
                 {/* Left Side - Slogan and Steps (Smaller) */}
