@@ -75,3 +75,50 @@ export async function getUser(clerkUserId: string) {
         throw new Error(`Failed to get user: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
 }
+
+export type OnboardingData = {
+    name: string;
+    email: string;
+    username: string;
+};
+
+/**
+ * Onboards an existing user by updating their profile data.
+ * @param clerkUserId - The unique Clerk user ID.
+ * @param data - The onboarding form data.
+ */
+export async function onboardUser(clerkUserId: string, data: OnboardingData) {
+    try {
+        const { onboardingFormSchema } = await import('@/app/onboarding/validations/onboarding');
+
+        const result = onboardingFormSchema.safeParse(data);
+
+        if (!result.success) {
+            return {
+                success: false,
+                message: result.error.issues[0].message,
+            };
+        }
+
+        const updatedUser = await prisma.user.update({
+            where: { clerkUserId },
+            data: {
+                name: result.data.name,
+                email: result.data.email,
+                username: result.data.username,
+                onboarded: true,
+            },
+        });
+
+        return {
+            success: true,
+            user: updatedUser,
+        };
+    } catch (error) {
+        console.error('Error in onboardUser:', error);
+        return {
+            success: false,
+            message: `Failed to onboard user: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        };
+    }
+}
