@@ -20,5 +20,5 @@ export default async function OnboardingPage() {
         redirect("/main");
     }
 
-    return <OnboardingForm user={dbUser} />;
+    return <OnboardingForm user={dbUser} className="animate-fade-in" />;
 }

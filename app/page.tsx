@@ -18,5 +18,5 @@ export default async function Home() {
     }
   }
 
-  return <LandingPage />;
+  return <LandingPage className="animate-fade-in" />;
 }
